@@ -12,10 +12,10 @@ while [ -n "$1" ]; do
     shift
 done
 
-docker build -t shukriadams/dotnet6-build .
+docker build -t shukriadams/dotnet6build .
 echo "container built"
 
-LOOKUP=$(docker run shukriadams/dotnet6-build:latest bash -c "dotnet --version") 
+LOOKUP=$(docker run shukriadams/dotnet6build:latest bash -c "dotnet --version") 
 if [ -n "${LOOKUP%%6.0.*}" ] ; then
     echo "ERROR : container returned unexpected dotnet version ${LOOKUP}, expected 6.0.*** "
     exit 1
@@ -28,9 +28,9 @@ if [ $DOCKERPUSH -eq 1 ]; then
     TAG=$(git describe --tags --abbrev=0) 
     echo "Tag ${TAG} detected"
 
-    docker tag shukriadams/dotnet6-build:latest shukriadams/dotnet6-build:"${TAG}${ARCHITECTURE}"
+    docker tag shukriadams/dotnet6build:latest shukriadams/dotnet6build:"${TAG}${ARCHITECTURE}"
     docker login -u $DOCKER_USER -p $DOCKER_PASS 
-    docker push shukriadams/dotnet6-build:$TAG$ARCHITECTURE
+    docker push shukriadams/dotnet6build:$TAG$ARCHITECTURE
 fi
 
 echo "build complete"
